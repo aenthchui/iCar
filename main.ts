@@ -476,7 +476,7 @@ namespace CUHK_JC_iCar {
       for (let index = 0; index < 3; index++) {
         for (let index1 = 0; index1 <= 2; index1++) {
           RGB_Car_Program().clear()
-          this.setPixelRGB(index1, rgb(0, ((0x00FF00 >> 8) & 0xFF), 0))
+          this.setPixelRGB(index1, 0x00FF00)
           RGB_Car_Program().show()
           basic.pause(200)
         }
