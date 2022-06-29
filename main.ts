@@ -366,6 +366,29 @@ namespace CUHK_JC_iCar {
         this.buf[offset + 1] = red;
         this.buf[offset + 2] = blue;
       }
+       private setPixelRGB(pixeloffset: number, rgb: number): void {
+           if (pixeloffset < 0
+               || pixeloffset >= this._length)
+               return;
+
+           let stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+           pixeloffset = (pixeloffset + this.start) * stride;
+           
+           let red = unpackR(rgb);
+           let green = unpackG(rgb);
+           let blue = unpackB(rgb);
+           
+           let br = this.brightness;
+           if (br < 255) {
+               red = (red * br) >> 8;
+               green = (green * br) >> 8;
+               blue = (blue * br) >> 8;
+           }
+           this.setBufferRGB(pixeloffset, red, green, blue)
+      }
+      setPixelColor(pixeloffset: number, rgb: number): void {
+           this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
+      }
       private setAllRGB(rgb: number) {
         let red = unpackR(rgb);
         let green = unpackG(rgb);
@@ -471,9 +494,10 @@ namespace CUHK_JC_iCar {
     //% group="RGB Module" blockGap=10
     export function runFlowLight() {
       for (let index = 0; index < 3; index++) {
-        for (let index = 0; index <= 2; index++) {
+        for (let index1 = 0; index1 <= 2; index1++) {
           RGB_Car_Program().clear()
-          RGB_Car_Program().showColor(rgb(0, ((0x00FF00 >> 8) & 0xFF), 0))
+          RGB_Car_Program().setPixelColor(index1, rgb(0, ((0x00FF00 >> 8) & 0xFF), 0))
+          RGB_Car_Program().show()
           basic.pause(200)
         }
       }
