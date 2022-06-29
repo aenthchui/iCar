@@ -366,26 +366,6 @@ namespace CUHK_JC_iCar {
         this.buf[offset + 1] = red;
         this.buf[offset + 2] = blue;
       }
-       private setPixelRGB(pixeloffset: number, rgb: number): void {
-           if (pixeloffset < 0
-               || pixeloffset >= this._length)
-               return;
-
-           let stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-           pixeloffset = (pixeloffset + this.start) * stride;
-           
-           let red = unpackR(rgb);
-           let green = unpackG(rgb);
-           let blue = unpackB(rgb);
-           
-           let br = this.brightness;
-           if (br < 255) {
-               red = (red * br) >> 8;
-               green = (green * br) >> 8;
-               blue = (blue * br) >> 8;
-           }
-           this.setBufferRGB(pixeloffset, red, green, blue)
-      }
       private setAllRGB(rgb: number) {
         let red = unpackR(rgb);
         let green = unpackG(rgb);
