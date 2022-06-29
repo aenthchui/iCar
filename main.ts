@@ -360,6 +360,9 @@ namespace CUHK_JC_iCar {
         pins.digitalWritePin(this.pin, 0);
         // don't yield to avoid races on initialization
       }
+      setPixelColor(pixeloffset: number, rgb: number): void {
+        this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
+      }
       private setBufferRGB(offset: number, red: number, green: number, blue: number): void {
   
         this.buf[offset + 0] = green;
