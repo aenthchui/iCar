@@ -386,9 +386,6 @@ namespace CUHK_JC_iCar {
            }
            this.setBufferRGB(pixeloffset, red, green, blue)
       }
-      setPixelColor(pixeloffset: number, rgb: number): void {
-           this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
-      }
       private setAllRGB(rgb: number) {
         let red = unpackR(rgb);
         let green = unpackG(rgb);
@@ -496,7 +493,7 @@ namespace CUHK_JC_iCar {
       for (let index = 0; index < 3; index++) {
         for (let index1 = 0; index1 <= 2; index1++) {
           RGB_Car_Program().clear()
-          RGB_Car_Program().setPixelColor(index1, rgb(0, ((0x00FF00 >> 8) & 0xFF), 0))
+          RGB_Car_Program().setPixelRGB(index1, rgb(0, ((0x00FF00 >> 8) & 0xFF), 0))
           RGB_Car_Program().show()
           basic.pause(200)
         }
