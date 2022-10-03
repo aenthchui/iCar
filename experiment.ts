@@ -1,4 +1,5 @@
 //% color="#EC7482" weight=4 icon="\uf0c3" block="CUHK_JC_iCar_Experiments"
+//% groups='["iCar Food Delivery"]'
 
 namespace CUHK_JC_iCar_Experiments{ 
   let Current_Location = 0
@@ -10,6 +11,15 @@ namespace CUHK_JC_iCar_Experiments{
       //% block="Knowledge-based"
       knowledge = 3
   }
+  /**
+  * Sample points of delivering to A, B, F, G
+  */ 
+  //% block="Points A,B,F,G"
+  //% group="iCar Food Delivery" blockGap=10
+  export function ABFG(): string[] {
+    return ["a","b","f","g"];
+  }
+  
   /**
   * Move iCar to array of points(A to H) using SKill, Rule or Knowledge-bases reasoning, click "+" to customize speed values
   */
@@ -37,12 +47,5 @@ namespace CUHK_JC_iCar_Experiments{
     }
   }
     
-  /**
-  * Sample points of delivering to A, B, F, G
-  */ 
-  //% block="A,B,F,G"
-  //% group="iCar Food Delivery" blockGap=10
-  export function ABFG(): string[] {
-    return ["a","b","f","g"];
-  }
+
 }
