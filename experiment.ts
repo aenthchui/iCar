@@ -5,7 +5,7 @@ namespace CUHK_JC_iCar_Experiments{
   let Current_Location = 0
   let Pointing = 1
   let Next_Location = 0
-  
+  let Target = 0
   
   
   export enum reason {
@@ -38,6 +38,31 @@ namespace CUHK_JC_iCar_Experiments{
       else return 1
     }
   }
+  function Search_Tag (tag: number, LeftRight: number, LSpeed: number, RSpeed: number, FSpeed: number) {
+    if (LeftRight == 1) {
+        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinRight, RSpeed)
+    } else {
+        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
+    }
+    huskylens.request()
+    while (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
+        huskylens.request()
+    }
+  }
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   /**
   * Sample points of delivering to A, B, F, G
@@ -65,7 +90,9 @@ namespace CUHK_JC_iCar_Experiments{
       Current_Location = 0
       let tag = sort(location)
       if(index == 1){
-      
+        Target = tag.shift()
+        Search_Tag(Next_Location, search_to_Left_Right(Pointing,Target), LSpeed, RSpeed, FSpeed)
+        
       }
       if(index == 2){
       
