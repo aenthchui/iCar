@@ -13,8 +13,8 @@ namespace CUHK_JC_iCar_Experiments{
   }
   export function Sort(location: string[]): number[]{
     let tag_numbers: number[] = []
-    if ((locations.indexOf("A") != -1)||(locations.indexOf("a") != -1)) { tag_numbers.push(1)}
-    if ((locations.indexOf("B") != -1)||(locations.indexOf("b") != -1)) { tag_numbers.push(2)}
+    if ((location.indexOf("A") != -1)||(location.indexOf("a") != -1)) { tag_numbers.push(1)}
+    if ((location.indexOf("B") != -1)||(location.indexOf("b") != -1)) { tag_numbers.push(2)}
     if ((location.indexOf("C") != -1)||(location.indexOf("c") != -1)) { tag_numbers.push(3)}
     if ((location.indexOf("D") != -1)||(location.indexOf("d") != -1)) { tag_numbers.push(4)}
     if ((location.indexOf("E") != -1)||(location.indexOf("e") != -1)) { tag_numbers.push(5)}
