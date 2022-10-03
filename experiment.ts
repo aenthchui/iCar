@@ -11,13 +11,41 @@ namespace CUHK_JC_iCar_Experiments{
       //% block="Knowledge-based"
       knowledge = 3
   }
+  export function Sort(location: string[]): number[]{
+    let tag_numbers: number[] = []
+    if ((locations.indexOf("A") != -1)||(locations.indexOf("a") != -1)) {
+        tag_numbers.push(1)
+    }
+    if ((locations.indexOf("B") != -1)||(locations.indexOf("b") != -1)) {
+        tag_numbers.push(2)
+    }
+    if ((locations.indexOf("C") != -1)||(locations.indexOf("c") != -1)) {
+        tag_numbers.push(3)
+    }
+    if ((locations.indexOf("D") != -1)||(locations.indexOf("d") != -1)) {
+        tag_numbers.push(4)
+    }
+    if ((locations.indexOf("E") != -1)||(locations.indexOf("e") != -1)) {
+        tag_numbers.push(5)
+    }
+    if ((locations.indexOf("F") != -1)||(locations.indexOf("f") != -1)) {
+        tag_numbers.push(6)
+    }
+    if ((locations.indexOf("G") != -1)||(locations.indexOf("g") != -1)) {
+        tag_numbers.push(7)
+    }
+    if ((locations.indexOf("H") != -1)||(locations.indexOf("h") != -1)) {
+        tag_numbers.push(8)
+    }
+  return tag_numbers
+  }
   /**
   * Sample points of delivering to A, B, F, G
   */ 
   //% block="Points A,B,F,G"
   //% group="iCar Food Delivery" blockGap=10
   export function ABFG(): string[] {
-    return ["a","b","f","g"];
+    return ["a","b","f","g"]
   }
   
   /**
@@ -35,6 +63,7 @@ namespace CUHK_JC_iCar_Experiments{
       huskylens.initI2c()
       huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
       Current_Location = 0
+      let tag = sort(location)
       if(index == 1){
       
       }
