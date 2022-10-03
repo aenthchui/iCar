@@ -1,4 +1,4 @@
-//% color="#EC7482" weight=4 icon="\uf492" block="CUHK_JC_iCar_Experiments"
+//% color="#EC7482" weight=4 icon="\uf0c3" block="CUHK_JC_iCar_Experiments"
 
 namespace CUHK_JC_iCar_Experiments{ 
   let Current_Location = 0
