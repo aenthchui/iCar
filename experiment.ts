@@ -3,6 +3,11 @@
 
 namespace CUHK_JC_iCar_Experiments{ 
   let Current_Location = 0
+  let Pointing = 1
+  let Next_Location = 0
+  
+  
+  
   export enum reason {
       //% block="Skill-based"
       skill = 1,
@@ -11,18 +16,29 @@ namespace CUHK_JC_iCar_Experiments{
       //% block="Knowledge-based"
       knowledge = 3
   }
-  export function Sort(location: string[]): number[]{
+  export function sort(location: string[]): number[]{
     let tag_numbers: number[] = []
-    if ((location.indexOf("A") != -1)||(location.indexOf("a") != -1)) { tag_numbers.push(1)}
-    if ((location.indexOf("B") != -1)||(location.indexOf("b") != -1)) { tag_numbers.push(2)}
-    if ((location.indexOf("C") != -1)||(location.indexOf("c") != -1)) { tag_numbers.push(3)}
-    if ((location.indexOf("D") != -1)||(location.indexOf("d") != -1)) { tag_numbers.push(4)}
-    if ((location.indexOf("E") != -1)||(location.indexOf("e") != -1)) { tag_numbers.push(5)}
-    if ((location.indexOf("F") != -1)||(location.indexOf("f") != -1)) { tag_numbers.push(6)}
-    if ((location.indexOf("G") != -1)||(location.indexOf("g") != -1)) { tag_numbers.push(7)}
-    if ((location.indexOf("H") != -1)||(location.indexOf("h") != -1)) { tag_numbers.push(8)}
+    if ((location.indexOf("A") != -1)||(location.indexOf("a") != -1)) {tag_numbers.push(1)}
+    if ((location.indexOf("B") != -1)||(location.indexOf("b") != -1)) {tag_numbers.push(2)}
+    if ((location.indexOf("C") != -1)||(location.indexOf("c") != -1)) {tag_numbers.push(3)}
+    if ((location.indexOf("D") != -1)||(location.indexOf("d") != -1)) {tag_numbers.push(4)}
+    if ((location.indexOf("E") != -1)||(location.indexOf("e") != -1)) {tag_numbers.push(5)}
+    if ((location.indexOf("F") != -1)||(location.indexOf("f") != -1)) {tag_numbers.push(6)}
+    if ((location.indexOf("G") != -1)||(location.indexOf("g") != -1)) {tag_numbers.push(7)}
+    if ((location.indexOf("H") != -1)||(location.indexOf("h") != -1)) {tag_numbers.push(8)}
   return tag_numbers
   }
+  
+  export function search_to_Left_Right(pointing:number, target:number): number{
+    if (target>=pointing){
+      if (target-pointing <= 4) return 2
+      else return 1
+    } else{
+      if (target-pointing <= -4) return 2
+      else return 1
+    }
+  }
+  
   /**
   * Sample points of delivering to A, B, F, G
   */ 
