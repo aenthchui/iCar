@@ -94,7 +94,7 @@ namespace CUHK_JC_iCar_Experiments{
         Search_Tag(Next_Location, search_to_Left_Right(Pointing,Target), LSpeed, RSpeed, FSpeed)
         
       }
-      if(index == 2){
+      else if(index == 2){
       
       }
       else{
