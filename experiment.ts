@@ -169,7 +169,7 @@ namespace CUHK_JC_iCar_Experiments{
       huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
       let tag = sort(location)
       if(index == 1){
-        while(tag_numbers.length != 0) {
+        while(tag.length != 0) {
             Target = tag.shift()
             Search_Tag(search_to_Left_Right(), LSpeed, RSpeed, FSpeed)
             Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
