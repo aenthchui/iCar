@@ -4,7 +4,6 @@
 namespace CUHK_JC_iCar_Experiments{ 
   let Current_Location = 0
   let Pointing = 1
-  let Next_Location = 0
   let Target = 0
   
   
@@ -29,12 +28,12 @@ namespace CUHK_JC_iCar_Experiments{
   return tag_numbers
   }
   
-  export function search_to_Left_Right(pointing:number, target:number): number{
-    if (target>=pointing){
-      if (target-pointing <= 4) return 2
+  export function search_to_Left_Right(): number{
+    if (Target>=Pointing){
+      if (Target-Pointing <= 4) return 2
       else return 1
     } else{
-      if (target-pointing <= -4) return 2
+      if (Target-Pointing <= -4) return 2
       else return 1
     }
   }
@@ -68,7 +67,7 @@ namespace CUHK_JC_iCar_Experiments{
     }
     }
   }
-  function Line_Follow_Until_Tag (tag: number,  LSpeed: number, RSpeed: number, FSpeed: number) {
+  function Line_Follow_Until_Tag (tag: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean) {
     huskylens.request()
     while (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
         for (let index = 0; index < 5; index++) {
@@ -90,6 +89,33 @@ namespace CUHK_JC_iCar_Experiments{
             break;
         }
     }
+    CUHK_JC_iCar.setHeadColor(0x00ff00)
+    Current_Location = tag
+    if (straight){
+        forward_until_tag(tag, FSpeed)
+        Turn_90_Deg(RSpeed)
+    }
+  }
+  function forward_until_tag(tag: number, FSpeed: number){
+    while (huskylens.readeBox(tag, Content1.yCenter) <= 120) {
+        huskylens.request()
+        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+        huskylens.request()
+    }
+  }
+
+  function home_calibration(LSpeed: number, RSpeed: number, FSpeed: number){
+    forward_until_tag(9,FSpeed)
+    Search_Tag(9, 1, LSpeed, RSpeed, FSpeed)
+  }
+
+  function Turn_90_Deg(RSpeed: number){
+    while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
+        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinRight, RSpeed)
+    }
+    while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine)) {
+        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinRight, RSpeed)
+    }
   }
   function Line_Following(LSpeed: number, RSpeed: number, FSpeed: number){
     if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
@@ -102,7 +128,10 @@ namespace CUHK_JC_iCar_Experiments{
         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
     }
   }
-  
+  function Update_Pointing(){
+    if (Current_Location + 4 > 8){ return (Current_Location + 4 - 8)}
+    else return (Current_Location + 4)
+  }
   
   
   
@@ -138,13 +167,23 @@ namespace CUHK_JC_iCar_Experiments{
     if (input.buttonIsPressed(Button.A)){
       huskylens.initI2c()
       huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
-      Current_Location = 0
       let tag = sort(location)
       if(index == 1){
-        Target = tag.shift()
-        Search_Tag(Target, search_to_Left_Right(Pointing,Target), LSpeed, RSpeed, FSpeed)
-        Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed)
-
+        while(tag_numbers.length != 0) {
+            Target = tag.shift()
+            Search_Tag(search_to_Left_Right(), LSpeed, RSpeed, FSpeed)
+            Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
+            Turn_90_Deg(RSpeed)
+            Pointing = Update_Pointing()
+            CUHK_JC_iCar.headLightsOff()
+            Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, false)
+            Search_Tag(Target, search_to_Left_Right(), LSpeed, RSpeed, FSpeed)
+            home_calibration(LSpeed, RSpeed, FSpeed)
+            while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+            }
+            CUHK_JC_iCar.carStop()
+        }
       }
       else if(index == 2){
       
