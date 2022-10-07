@@ -178,7 +178,6 @@ namespace CUHK_JC_iCar_Experiments{
             Pointing = Update_Pointing()
             CUHK_JC_iCar.headLightsOff()
             Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, false)
-            Search_Tag(Target, search_to_Left_Right(), LSpeed, RSpeed, FSpeed)
             home_calibration(LSpeed, RSpeed, FSpeed)
             while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
                 CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
