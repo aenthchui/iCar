@@ -28,12 +28,12 @@ namespace CUHK_JC_iCar_Experiments{
   return tag_numbers
   }
   
-  export function search_to_Left_Right(): number{
-    if (Target>=Pointing){
-      if (Target-Pointing <= 4) return 2
+  export function search_to_Left_Right(target: number): number{
+    if (target>=Pointing){
+      if (target-Pointing <= 4) return 2
       else return 1
     } else{
-      if (Target-Pointing <= -4) return 2
+      if (target-Pointing <= -4) return 2
       else return 1
     }
   }
@@ -98,7 +98,7 @@ namespace CUHK_JC_iCar_Experiments{
     }
   }
   function forward_until_tag(tag: number, FSpeed: number){
-    while (huskylens.readeBox(tag, Content1.yCenter) <= 120) {
+    while (huskylens.readeBox(tag, Content1.yCenter) <= 100) {
         huskylens.request()
         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
         huskylens.request()
@@ -172,7 +172,7 @@ namespace CUHK_JC_iCar_Experiments{
       if(index == 1){
         while(tag.length != 0) {
             Target = tag.shift()
-            Search_Tag(Target, search_to_Left_Right(), LSpeed, RSpeed, FSpeed)
+            Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
             Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
             Turn_90_Deg(RSpeed)
             Pointing = Update_Pointing()
@@ -186,7 +186,48 @@ namespace CUHK_JC_iCar_Experiments{
         }
       }
       else if(index == 2){
-      
+        while(tag.length != 0) {
+            Target = tag.shift()
+            if (Target<=3){
+                Search_Tag(1, search_to_Left_Right(1), LSpeed, RSpeed, FSpeed)
+                Line_Follow_Until_Tag(1, LSpeed, RSpeed, FSpeed, false)
+                if (Target==1){
+                    CUHK_JC_iCar.setHeadColor(0x00ff00)
+                    Target = tag.shift()
+                }
+                forward_until_tag(1,FSpeed)
+                Turn_90_Deg(RSpeed)
+                CUHK_JC_iCar.headLightsOff()
+                Line_Follow_Until_Tag(2, LSpeed, RSpeed, FSpeed, false)
+                if (Target==2){
+                    basic.pause(1000)
+                    CUHK_JC_iCar.setHeadColor(0x00ff00)
+                    Target = tag.shift()
+                }                
+                CUHK_JC_iCar.headLightsOff()
+                Line_Follow_Until_Tag(3, LSpeed, RSpeed, FSpeed, false)
+                if (Target==3){
+                    basic.pause(1000)
+                    CUHK_JC_iCar.setHeadColor(0x00ff00)
+                    Target = tag.shift()
+                }
+                CUHK_JC_iCar.headLightsOff()
+                Pointing = 7
+                Current_Location = 3
+                while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
+                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
+                }
+                Turn_90_Deg(RSpeed)
+                Turn_90_Deg(RSpeed)
+                Line_Follow_Until_Tag(3, LSpeed, RSpeed, FSpeed, false)
+                home_calibration(LSpeed, RSpeed, FSpeed)
+                while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
+                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+                }
+                CUHK_JC_iCar.carStop()
+            }
+            
+        }
       }
       else{
       
