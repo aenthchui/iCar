@@ -48,9 +48,60 @@ namespace CUHK_JC_iCar_Experiments{
     while (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
         huskylens.request()
     }
+    while (true) {
+    huskylens.request()
+    while (huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+        if (huskylens.readeBox(tag, Content1.xCenter) < 140) {
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed/2)
+        } else if (huskylens.readeBox(tag, Content1.xCenter) > 180) {
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed/2)
+        } else {
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed/2)
+        }
+        huskylens.request()
+    }
+    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed/2)
+    basic.pause(500)
+    huskylens.request()
+    if (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
+        break;
+    }
+    }
   }
- 
-  
+  function Line_Follow_Until_Tag (tag: number,  LSpeed: number, RSpeed: number, FSpeed: number) {
+    huskylens.request()
+    while (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
+        for (let index = 0; index < 5; index++) {
+            Line_Following(LSpeed, RSpeed, FSpeed)
+        }
+        huskylens.request()
+    }
+    while (true) {
+        while (huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+            for (let index = 0; index < 5; index++) {
+                Line_Following(LSpeed, RSpeed, FSpeed)
+            }
+            huskylens.request()
+        }
+        CUHK_JC_iCar.carStop()
+        basic.pause(50)
+        huskylens.request()
+        if (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
+            break;
+        }
+    }
+  }
+  function Line_Following(LSpeed: number, RSpeed: number, FSpeed: number){
+    if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+    } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
+        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed)
+    } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed)
+    } else {
+        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+    }
+  }
   
   
   
@@ -76,7 +127,7 @@ namespace CUHK_JC_iCar_Experiments{
   /**
   * Move iCar to array of points(A to H) using SKill, Rule or Knowledge-bases reasoning, click "+" to customize speed values
   */
-  //% block="iCar deliver food to $location using %index reasoning || at left speed %LSpeed\\%, right speed %RSpeed\\%, forward speed %FSpeed\\%"
+  //% block="iCar deliver food to $location using %index reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
   //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
   //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=20
   //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=20
@@ -92,7 +143,8 @@ namespace CUHK_JC_iCar_Experiments{
       if(index == 1){
         Target = tag.shift()
         Search_Tag(Next_Location, search_to_Left_Right(Pointing,Target), LSpeed, RSpeed, FSpeed)
-        
+        Line_Follow_Until_Tag(Next_Location, LSpeed, RSpeed, FSpeed)
+
       }
       else if(index == 2){
       
