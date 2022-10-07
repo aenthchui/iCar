@@ -98,8 +98,8 @@ namespace CUHK_JC_iCar_Experiments{
     }
   }
   function forward_until_tag(tag: number, FSpeed: number){
-        huskylens.request()
-    while (huskylens.readeBox(tag, Content1.yCenter) <= 80) {
+    huskylens.request()
+    while (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
         huskylens.request()
     }
@@ -193,7 +193,6 @@ namespace CUHK_JC_iCar_Experiments{
                 Line_Follow_Until_Tag(1, LSpeed, RSpeed, FSpeed, false)
                 if (Target==1){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
-                    Target = tag.shift()
                 }
                 forward_until_tag(1,FSpeed)
                 Turn_90_Deg(RSpeed)
@@ -202,7 +201,7 @@ namespace CUHK_JC_iCar_Experiments{
                 if (Target==2){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
-                    Target = tag.shift()
+
                 }                
                 CUHK_JC_iCar.headLightsOff()
                 Line_Follow_Until_Tag(3, LSpeed, RSpeed, FSpeed, false)
@@ -224,13 +223,16 @@ namespace CUHK_JC_iCar_Experiments{
                     CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
                 }
                 CUHK_JC_iCar.carStop()
+                while(tag[1]<=3){
+                    tag.shift()
+                }
             }
             else if ((Target==5)||(Target==6)){
                 Search_Tag(5, search_to_Left_Right(5), LSpeed, RSpeed, FSpeed)
                 Line_Follow_Until_Tag(5, LSpeed, RSpeed, FSpeed, false)
                 if (Target==5){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
-                    Target = tag.shift()
+      
                 }
                 forward_until_tag(5,FSpeed)
                 Turn_90_Deg(RSpeed)
@@ -254,6 +256,10 @@ namespace CUHK_JC_iCar_Experiments{
                     CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
                 }
                 CUHK_JC_iCar.carStop()
+                
+                while(tag[1]<=6){
+                    tag.shift()
+                }
             }
             else{
                 Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
