@@ -202,7 +202,7 @@ namespace CUHK_JC_iCar_Experiments{
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
                     if (tag[1]<=3){
-                        Target=tag.push()
+                        Target=tag.shift()
                     }
 
                 }                
@@ -212,7 +212,7 @@ namespace CUHK_JC_iCar_Experiments{
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
                     if (tag[1]<=3){
-                        Target=tag.push()
+                        Target=tag.shift()
                     }
                 }
                 CUHK_JC_iCar.headLightsOff()
@@ -237,7 +237,7 @@ namespace CUHK_JC_iCar_Experiments{
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
                     if (tag[1]<=6){
-                        Target=tag.push()
+                        Target=tag.shift()
                     }
       
                 }
