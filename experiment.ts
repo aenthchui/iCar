@@ -193,6 +193,10 @@ namespace CUHK_JC_iCar_Experiments{
                 Line_Follow_Until_Tag(1, LSpeed, RSpeed, FSpeed, false)
                 if (Target==1){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
+                    basic.pause(1000)
+                    if (tag[1]<=3){
+                        Target=tag.shift()
+                    }
                 }
                 forward_until_tag(1,FSpeed)
                 Turn_90_Deg(RSpeed)
@@ -211,9 +215,6 @@ namespace CUHK_JC_iCar_Experiments{
                 if (Target==3){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
-                    if (tag[1]<=3){
-                        Target=tag.shift()
-                    }
                 }
                 CUHK_JC_iCar.headLightsOff()
                 Pointing = 7
