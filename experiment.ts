@@ -142,8 +142,8 @@ namespace CUHK_JC_iCar_Experiments{
       let tag = sort(location)
       if(index == 1){
         Target = tag.shift()
-        Search_Tag(Next_Location, search_to_Left_Right(Pointing,Target), LSpeed, RSpeed, FSpeed)
-        Line_Follow_Until_Tag(Next_Location, LSpeed, RSpeed, FSpeed)
+        Search_Tag(Target, search_to_Left_Right(Pointing,Target), LSpeed, RSpeed, FSpeed)
+        Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed)
 
       }
       else if(index == 2){
