@@ -171,7 +171,7 @@ namespace CUHK_JC_iCar_Experiments{
       if(index == 1){
         while(tag.length != 0) {
             Target = tag.shift()
-            Search_Tag(search_to_Left_Right(), LSpeed, RSpeed, FSpeed)
+            Search_Tag(Target, search_to_Left_Right(), LSpeed, RSpeed, FSpeed)
             Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
             Turn_90_Deg(RSpeed)
             Pointing = Update_Pointing()
