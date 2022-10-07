@@ -89,9 +89,10 @@ namespace CUHK_JC_iCar_Experiments{
             break;
         }
     }
-    CUHK_JC_iCar.setHeadColor(0x00ff00)
+
     Current_Location = tag
-    if (straight){
+    if (straight == true){
+        CUHK_JC_iCar.setHeadColor(0x00ff00)
         forward_until_tag(tag, FSpeed)
         Turn_90_Deg(RSpeed)
     }
