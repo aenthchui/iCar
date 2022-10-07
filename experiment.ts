@@ -30,11 +30,11 @@ namespace CUHK_JC_iCar_Experiments{
   
   export function search_to_Left_Right(target: number): number{
     if (target>=Pointing){
-      if (target-Pointing <= 4) return 2
-      else return 1
+      if (target-Pointing <= 4) return 1
+      else return 2
     } else{
-      if (target-Pointing <= -4) return 2
-      else return 1
+      if (target-Pointing <= -4) return 1
+      else return 2
     }
   }
   function Search_Tag (tag: number, LeftRight: number, LSpeed: number, RSpeed: number, FSpeed: number) {
@@ -51,15 +51,15 @@ namespace CUHK_JC_iCar_Experiments{
     huskylens.request()
     while (huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
         if (huskylens.readeBox(tag, Content1.xCenter) < 140) {
-            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed/2)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed*0.7)
         } else if (huskylens.readeBox(tag, Content1.xCenter) > 180) {
-            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed/2)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed*0.7)
         } else {
-            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed/2)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed*0.7)
         }
         huskylens.request()
     }
-    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed/2)
+    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed*0.7)
     basic.pause(500)
     huskylens.request()
     if (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
@@ -98,8 +98,8 @@ namespace CUHK_JC_iCar_Experiments{
     }
   }
   function forward_until_tag(tag: number, FSpeed: number){
-    while (huskylens.readeBox(tag, Content1.yCenter) <= 80) {
         huskylens.request()
+    while (huskylens.readeBox(tag, Content1.yCenter) <= 80) {
         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
         huskylens.request()
     }
@@ -209,7 +209,6 @@ namespace CUHK_JC_iCar_Experiments{
                 if (Target==3){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
-                    Target = tag.shift()
                 }
                 CUHK_JC_iCar.headLightsOff()
                 Pointing = 7
@@ -240,7 +239,6 @@ namespace CUHK_JC_iCar_Experiments{
                 if (Target==6){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
-                    Target = tag.shift()
                 }                
                 CUHK_JC_iCar.headLightsOff()
                 Pointing = 2
