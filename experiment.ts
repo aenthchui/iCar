@@ -163,7 +163,7 @@ namespace CUHK_JC_iCar_Experiments{
     CUHK_JC_iCar.headLightsOff()
  }
 
- function switch (t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean){
+ function switch (t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean):number{
     Line_Follow_Until_Tag(t, LSpeed, RSpeed, FSpeed, false)
     if (tag.length != 0) {
         if (tag[0] - Current_Location < 2) {
