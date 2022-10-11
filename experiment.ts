@@ -68,7 +68,7 @@ namespace CUHK_JC_iCar_Experiments{
     }
     }
   }
-  function Line_Follow_Until_Tag (tag: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean) {
+  export function Line_Follow_Until_Tag (tag: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean) {
     huskylens.request()
     while (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
         for (let index = 0; index < 5; index++) {
@@ -162,7 +162,7 @@ namespace CUHK_JC_iCar_Experiments{
     }
     CUHK_JC_iCar.headLightsOff()
   }
-  function switch (t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean): number{
+  export function switch(t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean): number{
     Line_Follow_Until_Tag(t, LSpeed, RSpeed, FSpeed, false)
     if (tag.length != 0) {
         if (tag[0] - Current_Location < 2) {
