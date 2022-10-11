@@ -158,7 +158,7 @@ namespace CUHK_JC_iCar_Experiments{
     if (tag.indexOf(t)!=-1){
         CUHK_JC_iCar.setHeadColor(0x00ff00)
         basic.pause(1000)
-        tag.removeAt(tag.indexOf(counter))
+        tag.removeAt(tag.indexOf(t))
     }
     CUHK_JC_iCar.headLightsOff()
   }
@@ -326,7 +326,7 @@ namespace CUHK_JC_iCar_Experiments{
             let counter = 9
             while (Current_Location != end){
                 counter = Current_Location + 1
-                if (Current_location+1>8){ counter = 1 }
+                if (Current_Location+1>8){ counter = 1 }
                 Line_Follow_Until_Tag(counter, LSpeed, RSpeed, FSpeed, false)
                 if (tag.indexOf(counter)!=-1){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
