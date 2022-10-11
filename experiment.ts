@@ -7,7 +7,7 @@ namespace CUHK_JC_iCar_Experiments{
   let Target = 0
   let start = 0
   let end = 0
-  
+  let tag: number[] = []
   export enum reason {
       //% block="Skill-based"
       skill = 1,
@@ -151,8 +151,8 @@ namespace CUHK_JC_iCar_Experiments{
         return true
     }
     return false
- }
- function turn_to_tag(t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean){
+  }
+  function turn_to_tag(t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean){
     CUHK_JC_iCar.headLightsOff()
     Line_Follow_Until_Tag(t, LSpeed, RSpeed, FSpeed, false)
     if (tag.indexOf(t)!=-1){
@@ -161,10 +161,18 @@ namespace CUHK_JC_iCar_Experiments{
         tag.removeAt(tag.indexOf(counter))
     }
     CUHK_JC_iCar.headLightsOff()
- }
-
-  export function switch (t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean): number{
-
+  }
+  function switch (t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean): number{
+    Line_Follow_Until_Tag(t, LSpeed, RSpeed, FSpeed, false)
+    if (tag.length != 0) {
+        if (tag[0] - Current_Location < 2) {
+            switch(tag[0], LSpeed, RSpeed, FSpeed, false)
+        } else {
+            return 0
+        }
+    } else {
+        return 0
+    }
     return 0
  }
   
@@ -200,7 +208,7 @@ namespace CUHK_JC_iCar_Experiments{
     if (input.buttonIsPressed(Button.A)){
       huskylens.initI2c()
       huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
-      let tag = sort(location)
+      tag = sort(location)
       if(index == 1){
         while(tag.length != 0) {
             Target = tag.shift()
