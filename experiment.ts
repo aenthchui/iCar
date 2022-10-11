@@ -130,11 +130,11 @@ namespace CUHK_JC_iCar_Experiments{
         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
     }
   }
-  function Update_Pointing(){
+  function Update_Pointing(): number{
     if (Current_Location + 4 > 8){ return (Current_Location + 4 - 8)}
     else return (Current_Location + 4)
   }
-  function Complicated_Case (tag: number[]) {
+  function Complicated_Case (tag: number[]): boolean{
     if (tag.indexOf(1) != -1 && tag.indexOf(8) != -1 || tag.indexOf(1) != -1 && tag.indexOf(7) != -1 || tag.indexOf(2) != -1 && tag.indexOf(8) != -1) {
         for (let index = 0; index <= 8; index++) {
             if (tag.indexOf(8 - index) != -1 && tag.indexOf(7 - index) == -1 && tag.indexOf(6 - index) == -1) {
@@ -163,7 +163,7 @@ namespace CUHK_JC_iCar_Experiments{
     CUHK_JC_iCar.headLightsOff()
  }
 
- function switch (t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean):number{
+ function switch (t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean): number{
     Line_Follow_Until_Tag(t, LSpeed, RSpeed, FSpeed, false)
     if (tag.length != 0) {
         if (tag[0] - Current_Location < 2) {
