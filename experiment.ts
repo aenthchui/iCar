@@ -30,11 +30,11 @@ namespace CUHK_JC_iCar_Experiments{
   
   export function search_to_Left_Right(target: number): number{
     if (target>=Pointing){
-      if (target-Pointing <= 4) return 2
-      else return 1
+      if (target-Pointing <= 4) return 1
+      else return 2
     } else{
-      if (target-Pointing <= -4) return 2
-      else return 1
+      if (target-Pointing <= -4) return 1
+      else return 2
     }
   }
   function Search_Tag (tag: number, LeftRight: number, LSpeed: number, RSpeed: number, FSpeed: number) {
@@ -187,14 +187,14 @@ namespace CUHK_JC_iCar_Experiments{
       }
       else if(index == 2){
         Target = tag.shift()
-        while(tag.length != 0) {
+        while(Target != 0) {
             if (Target<=3){
                 Search_Tag(1, search_to_Left_Right(1), LSpeed, RSpeed, FSpeed)
                 Line_Follow_Until_Tag(1, LSpeed, RSpeed, FSpeed, false)
                 if (Target==1){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
-                    if (tag.length != 0){Target=tag.shift()}
+                    if (tag.length != 0){Target=tag.shift()} else {Target = 0}
                 }
                 forward_until_tag(1,FSpeed)
                 Turn_90_Deg(RSpeed)
@@ -203,14 +203,14 @@ namespace CUHK_JC_iCar_Experiments{
                 if (Target==2){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
-                    if (tag.length != 0){Target=tag.shift()}
+                     if (tag.length != 0){Target=tag.shift()} else {Target = 0}
                 }                
                 CUHK_JC_iCar.headLightsOff()
                 Line_Follow_Until_Tag(3, LSpeed, RSpeed, FSpeed, false)
                 if (Target==3){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
-                    if (tag.length != 0){Target=tag.shift()}
+                     if (tag.length != 0){Target=tag.shift()} else {Target = 0}
                 }
                 CUHK_JC_iCar.headLightsOff()
                 Pointing = 7
@@ -233,7 +233,7 @@ namespace CUHK_JC_iCar_Experiments{
                 if (Target==5){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
-                    if (tag.length != 0){Target=tag.shift()}
+                     if (tag.length != 0){Target=tag.shift()} else {Target = 0}
       
                 }
                 forward_until_tag(5,FSpeed)
@@ -243,7 +243,7 @@ namespace CUHK_JC_iCar_Experiments{
                 if (Target==6){
                     CUHK_JC_iCar.setHeadColor(0x00ff00)
                     basic.pause(1000)
-                    if (tag.length != 0){Target=tag.shift()}
+                     if (tag.length != 0){Target=tag.shift()} else {Target = 0}
                 }                
                 CUHK_JC_iCar.headLightsOff()
                 Pointing = 2
@@ -272,7 +272,7 @@ namespace CUHK_JC_iCar_Experiments{
                     CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
                 }
                 CUHK_JC_iCar.carStop()
-                if (tag.length != 0){Target=tag.shift()}
+                 if (tag.length != 0){Target=tag.shift()} else {Target = 0}
             }
 
             
