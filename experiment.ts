@@ -162,11 +162,11 @@ namespace CUHK_JC_iCar_Experiments{
     }
     CUHK_JC_iCar.headLightsOff()
   }
-  export function switch(t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean): number{
+  export function switch1(t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean): number{
     Line_Follow_Until_Tag(t, LSpeed, RSpeed, FSpeed, false)
     if (tag.length != 0) {
         if (tag[0] - Current_Location < 2) {
-            switch(tag[0], LSpeed, RSpeed, FSpeed, false)
+            switch1(tag[0], LSpeed, RSpeed, FSpeed, false)
         } else {
             return 0
         }
@@ -365,7 +365,7 @@ namespace CUHK_JC_iCar_Experiments{
                     Update_Pointing()
                 }
                 else{
-                    switch(tag[0], LSpeed, RSpeed, FSpeed, false)
+                    switch1(tag[0], LSpeed, RSpeed, FSpeed, false)
                     while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
                         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
                     }
