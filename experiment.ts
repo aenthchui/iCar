@@ -195,6 +195,7 @@ namespace CUHK_JC_iCar_Experiments {
             Line_Follow_Until_Tag(start, LSpeed, RSpeed, FSpeed, true)
             tag.removeAt(tag.indexOf(start))
             let counter = 9
+            CUHK_JC_iCar.headLightsOff()
             while (Current_Location != end) {
                 counter = Current_Location + 1
                 if (Current_Location + 1 > 8) { counter = 1 }
