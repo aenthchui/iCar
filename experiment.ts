@@ -270,7 +270,7 @@ namespace CUHK_JC_iCar_Experiments {
     //% block="iCar deliver food to $location using rule-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
     //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
     //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=20
-    //% FSpeed.min=1 FSpeed.max=100 FSpee d.defl=20
+    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=20
     //% inlineInputMode=inline
     //% expandableArgumentMode="toggle"
     //% group="iCar Food Delivery" blockGap=10
