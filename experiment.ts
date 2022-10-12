@@ -261,9 +261,14 @@ namespace CUHK_JC_iCar_Experiments {
                 CUHK_JC_iCar.carStop()
             }
         }
-        CUHK_JC_iCar.runFlowLight()
-        CUHK_JC_iCar.runFlowLight()
-        CUHK_JC_iCar.runFlowLight()
+        for (let index = 0; index < 3; index++) {
+            CUHK_JC_iCar.setHeadColor(0xff0000)
+            basic.pause(200)
+            CUHK_JC_iCar.setHeadColor(0x0000ff)
+            basic.pause(200)
+            CUHK_JC_iCar.setHeadColor(0x00ff00)
+            basic.pause(200)
+        }
     }
 
 
@@ -372,9 +377,14 @@ namespace CUHK_JC_iCar_Experiments {
 
 
         }
-        CUHK_JC_iCar.runFlowLight()
-        CUHK_JC_iCar.runFlowLight()
-        CUHK_JC_iCar.runFlowLight()
+        for (let index = 0; index < 3; index++) {
+            CUHK_JC_iCar.setHeadColor(0xff0000)
+            basic.pause(200)
+            CUHK_JC_iCar.setHeadColor(0x0000ff)
+            basic.pause(200)
+            CUHK_JC_iCar.setHeadColor(0x00ff00)
+            basic.pause(200)
+        }
     }
     /**
     * Move iCar to array of points(A to H) using SKill-bases reasoning, click "+" to customize speed values
@@ -404,9 +414,14 @@ namespace CUHK_JC_iCar_Experiments {
             }
             CUHK_JC_iCar.carStop()
         }
-        CUHK_JC_iCar.runFlowLight()
-        CUHK_JC_iCar.runFlowLight()
-        CUHK_JC_iCar.runFlowLight()
+        for (let index = 0; index < 3; index++) {
+            CUHK_JC_iCar.setHeadColor(0xff0000)
+            basic.pause(200)
+            CUHK_JC_iCar.setHeadColor(0x0000ff)
+            basic.pause(200)
+            CUHK_JC_iCar.setHeadColor(0x00ff00)
+            basic.pause(200)
+        }
     }
 
 
