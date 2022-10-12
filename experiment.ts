@@ -2,20 +2,13 @@
 //% groups='["iCar Food Delivery"]'
 
 namespace CUHK_JC_iCar_Experiments{ 
-    let Current_Location = 0
-    let Pointing = 1
-    let Target = 0
-    let start = 0
-    let end = 0
-    let tag: number[] = []
-    export enum reason {
-      //% block="Skill-based"
-      skill = 1,
-      //% block="Rule-based"
-      rule = 2,
-      //% block="Knowledge-based"
-      knowledge = 3
-  }
+  let Current_Location = 0
+  let Pointing = 1
+  let Target = 0
+  let start = 0
+  let end = 0
+  let tag: number[] = []
+
   export function sort(location: string[]): number[]{
     let tag_numbers: number[] = []
     if ((location.indexOf("A") != -1)||(location.indexOf("a") != -1)) {tag_numbers.push(1)}
@@ -158,11 +151,23 @@ namespace CUHK_JC_iCar_Experiments{
     if (tag.indexOf(t)!=-1){
         CUHK_JC_iCar.setHeadColor(0x00ff00)
         basic.pause(1000)
-        tag.removeAt(tag.indexOf(counter))
+        tag.removeAt(tag.indexOf(t))
     }
     CUHK_JC_iCar.headLightsOff()
   }
-
+  export function switch1(t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean): number{
+    Line_Follow_Until_Tag(t, LSpeed, RSpeed, FSpeed, false)
+    if (tag.length != 0) {
+        if (tag[0] - Current_Location < 2) {
+            switch1(tag[0], LSpeed, RSpeed, FSpeed, false)
+        } else {
+            return 0
+        }
+    } else {
+        return 0
+    }
+    return 0
+ }
   
   
   
@@ -183,7 +188,7 @@ namespace CUHK_JC_iCar_Experiments{
   }
   
   /**
-  * Move iCar to array of points(A to H) using SKill-based reasoning, click "+" to customize speed values
+  * Move iCar to array of points(A to H) using SKill-bases reasoning, click "+" to customize speed values
   */
   //% block="iCar deliver food to $location using skill-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
   //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
@@ -192,7 +197,7 @@ namespace CUHK_JC_iCar_Experiments{
   //% inlineInputMode=inline
   //% expandableArgumentMode="toggle"
   //% group="iCar Food Delivery" blockGap=10
-  export function skill(location: string[], LSpeed?: number,RSpeed?: number,FSpeed?: number): void {
+  export function skill(location: string[], index?: reason, LSpeed?: number,RSpeed?: number,FSpeed?: number): void {
     huskylens.initI2c()
     huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
     tag = sort(location)
@@ -213,16 +218,16 @@ namespace CUHK_JC_iCar_Experiments{
   }
 
   /**
-  * Move iCar to array of points(A to H) using Rule-based reasoning, click "+" to customize speed values
+  * Move iCar to array of points(A to H) using Rule-bases reasoning, click "+" to customize speed values
   */
-  //% block="iCar deliver food to $location using rule-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
+  //% block="iCar deliver food to $location using skill-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
   //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
   //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=20
-  //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=20
+  //% FSpeed.min=1 FSpeed.max=100 FSpee d.defl=20
   //% inlineInputMode=inline
   //% expandableArgumentMode="toggle"
   //% group="iCar Food Delivery" blockGap=10
-  export function rule(location: string[], LSpeed?: number,RSpeed?: number,FSpeed?: number): void {
+  export function rule(location: string[], index?: reason, LSpeed?: number,RSpeed?: number,FSpeed?: number): void {
     huskylens.initI2c()
     huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
     tag = sort(location)
@@ -314,11 +319,13 @@ namespace CUHK_JC_iCar_Experiments{
             CUHK_JC_iCar.carStop()
                 if (tag.length != 0){Target=tag.shift()} else {Target = 0}
         }
+
+        
     }
   }
 
   /**
-  * Move iCar to array of points(A to H) using Knowledge-based reasoning, click "+" to customize speed values
+  * Move iCar to array of points(A to H) using Knowledge-bases reasoning, click "+" to customize speed values
   */
   //% block="iCar deliver food to $location using knowledge-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
   //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
@@ -327,7 +334,7 @@ namespace CUHK_JC_iCar_Experiments{
   //% inlineInputMode=inline
   //% expandableArgumentMode="toggle"
   //% group="iCar Food Delivery" blockGap=10
-  export function skill(location: string[], LSpeed?: number,RSpeed?: number,FSpeed?: number): void {
+  export function knowledge(location: string[], index?: reason, LSpeed?: number,RSpeed?: number,FSpeed?: number): void {
     huskylens.initI2c()
     huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
     tag = sort(location)
@@ -338,7 +345,7 @@ namespace CUHK_JC_iCar_Experiments{
         let counter = 9
         while (Current_Location != end){
             counter = Current_Location + 1
-            if (Current_location+1>8){ counter = 1 }
+            if (Current_Location+1>8){ counter = 1 }
             Line_Follow_Until_Tag(counter, LSpeed, RSpeed, FSpeed, false)
             if (tag.indexOf(counter)!=-1){
                 CUHK_JC_iCar.setHeadColor(0x00ff00)
@@ -377,7 +384,7 @@ namespace CUHK_JC_iCar_Experiments{
                 Update_Pointing()
             }
             else{
-                switch(tag[0], LSpeed, RSpeed, FSpeed, false)
+                switch1(tag[0], LSpeed, RSpeed, FSpeed, false)
                 while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
                     CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
                 }
@@ -389,6 +396,7 @@ namespace CUHK_JC_iCar_Experiments{
                     CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
                 }
                 CUHK_JC_iCar.carStop()
+                Current_Location = end
                 Update_Pointing()
             }
         } else{
@@ -402,5 +410,7 @@ namespace CUHK_JC_iCar_Experiments{
         }
     }
     }
+  }
 
-}
+
+
