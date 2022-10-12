@@ -2,13 +2,13 @@
 //% groups='["iCar Food Delivery"]'
 
 namespace CUHK_JC_iCar_Experiments{ 
-  let Current_Location = 0
-  let Pointing = 1
-  let Target = 0
-  let start = 0
-  let end = 0
-  let tag: number[] = []
-  export enum reason {
+    let Current_Location = 0
+    let Pointing = 1
+    let Target = 0
+    let start = 0
+    let end = 0
+    let tag: number[] = []
+    export enum reason {
       //% block="Skill-based"
       skill = 1,
       //% block="Rule-based"
@@ -158,23 +158,11 @@ namespace CUHK_JC_iCar_Experiments{
     if (tag.indexOf(t)!=-1){
         CUHK_JC_iCar.setHeadColor(0x00ff00)
         basic.pause(1000)
-        tag.removeAt(tag.indexOf(t))
+        tag.removeAt(tag.indexOf(counter))
     }
     CUHK_JC_iCar.headLightsOff()
   }
-  export function switch1(t: number,  LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean): number{
-    Line_Follow_Until_Tag(t, LSpeed, RSpeed, FSpeed, false)
-    if (tag.length != 0) {
-        if (tag[0] - Current_Location < 2) {
-            switch1(tag[0], LSpeed, RSpeed, FSpeed, false)
-        } else {
-            return 0
-        }
-    } else {
-        return 0
-    }
-    return 0
- }
+
   
   
   
@@ -195,23 +183,124 @@ namespace CUHK_JC_iCar_Experiments{
   }
   
   /**
-  * Move iCar to array of points(A to H) using SKill, Rule or Knowledge-bases reasoning, click "+" to customize speed values
+  * Move iCar to array of points(A to H) using SKill-based reasoning, click "+" to customize speed values
   */
-  //% block="iCar deliver food to $location using %index reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
+  //% block="iCar deliver food to $location using skill-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
   //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
   //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=20
   //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=20
   //% inlineInputMode=inline
   //% expandableArgumentMode="toggle"
   //% group="iCar Food Delivery" blockGap=10
-  export function startProgram(location: string[], index?: reason, LSpeed?: number,RSpeed?: number,FSpeed?: number): void {
-    if (input.buttonIsPressed(Button.A)){
-      huskylens.initI2c()
-      huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
-      tag = sort(location)
-      if(index == 1){
-        while(tag.length != 0) {
-            Target = tag.shift()
+  export function skill(location: string[], LSpeed?: number,RSpeed?: number,FSpeed?: number): void {
+    huskylens.initI2c()
+    huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
+    tag = sort(location)
+    while(tag.length != 0) {
+        Target = tag.shift()
+        Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
+        Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
+        Turn_90_Deg(RSpeed)
+        Pointing = Update_Pointing()
+        CUHK_JC_iCar.headLightsOff()
+        Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, false)
+        home_calibration(LSpeed, RSpeed, FSpeed)
+        while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+        }
+        CUHK_JC_iCar.carStop()
+    }
+  }
+
+  /**
+  * Move iCar to array of points(A to H) using Rule-based reasoning, click "+" to customize speed values
+  */
+  //% block="iCar deliver food to $location using rule-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
+  //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
+  //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=20
+  //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=20
+  //% inlineInputMode=inline
+  //% expandableArgumentMode="toggle"
+  //% group="iCar Food Delivery" blockGap=10
+  export function rule(location: string[], LSpeed?: number,RSpeed?: number,FSpeed?: number): void {
+    huskylens.initI2c()
+    huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
+    tag = sort(location)
+    Target = tag.shift()
+    while(Target != 0) {
+        if (Target<=3){
+            Search_Tag(1, search_to_Left_Right(1), LSpeed, RSpeed, FSpeed)
+            Line_Follow_Until_Tag(1, LSpeed, RSpeed, FSpeed, false)
+            if (Target==1){
+                CUHK_JC_iCar.setHeadColor(0x00ff00)
+                basic.pause(1000)
+                if (tag.length != 0){Target=tag.shift()} else {Target = 0}
+            }
+            forward_until_tag(1,FSpeed)
+            Turn_90_Deg(RSpeed)
+            CUHK_JC_iCar.headLightsOff()
+            Line_Follow_Until_Tag(2, LSpeed, RSpeed, FSpeed, false)
+            if (Target==2){
+                CUHK_JC_iCar.setHeadColor(0x00ff00)
+                basic.pause(1000)
+                    if (tag.length != 0){Target=tag.shift()} else {Target = 0}
+            }                
+            CUHK_JC_iCar.headLightsOff()
+            Line_Follow_Until_Tag(3, LSpeed, RSpeed, FSpeed, false)
+            if (Target==3){
+                CUHK_JC_iCar.setHeadColor(0x00ff00)
+                basic.pause(1000)
+                    if (tag.length != 0){Target=tag.shift()} else {Target = 0}
+            }
+            CUHK_JC_iCar.headLightsOff()
+            Pointing = 7
+            Current_Location = 3
+            while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
+            }
+            Turn_90_Deg(RSpeed)
+            Turn_90_Deg(RSpeed)
+            Line_Follow_Until_Tag(3, LSpeed, RSpeed, FSpeed, false)
+            home_calibration(LSpeed, RSpeed, FSpeed)
+            while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+            }
+            CUHK_JC_iCar.carStop()
+        }
+        else if ((Target==5)||(Target==6)){
+            Search_Tag(5, search_to_Left_Right(5), LSpeed, RSpeed, FSpeed)
+            Line_Follow_Until_Tag(5, LSpeed, RSpeed, FSpeed, false)
+            if (Target==5){
+                CUHK_JC_iCar.setHeadColor(0x00ff00)
+                basic.pause(1000)
+                    if (tag.length != 0){Target=tag.shift()} else {Target = 0}
+    
+            }
+            forward_until_tag(5,FSpeed)
+            Turn_90_Deg(RSpeed)
+            CUHK_JC_iCar.headLightsOff()
+            Line_Follow_Until_Tag(6, LSpeed, RSpeed, FSpeed, false)
+            if (Target==6){
+                CUHK_JC_iCar.setHeadColor(0x00ff00)
+                basic.pause(1000)
+                    if (tag.length != 0){Target=tag.shift()} else {Target = 0}
+            }                
+            CUHK_JC_iCar.headLightsOff()
+            Pointing = 2
+            Current_Location = 6
+            while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
+            }
+            Turn_90_Deg(RSpeed)
+            Turn_90_Deg(RSpeed)
+            Line_Follow_Until_Tag(6, LSpeed, RSpeed, FSpeed, false)
+            home_calibration(LSpeed, RSpeed, FSpeed)
+            while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+            }
+            CUHK_JC_iCar.carStop()
+        }
+        else{
             Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
             Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
             Turn_90_Deg(RSpeed)
@@ -223,179 +312,95 @@ namespace CUHK_JC_iCar_Experiments{
                 CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
             }
             CUHK_JC_iCar.carStop()
+                if (tag.length != 0){Target=tag.shift()} else {Target = 0}
         }
-      }
-    else if(index == 2){
-        Target = tag.shift()
-        while(Target != 0) {
-            if (Target<=3){
-                Search_Tag(1, search_to_Left_Right(1), LSpeed, RSpeed, FSpeed)
-                Line_Follow_Until_Tag(1, LSpeed, RSpeed, FSpeed, false)
-                if (Target==1){
-                    CUHK_JC_iCar.setHeadColor(0x00ff00)
-                    basic.pause(1000)
-                    if (tag.length != 0){Target=tag.shift()} else {Target = 0}
-                }
-                forward_until_tag(1,FSpeed)
-                Turn_90_Deg(RSpeed)
-                CUHK_JC_iCar.headLightsOff()
-                Line_Follow_Until_Tag(2, LSpeed, RSpeed, FSpeed, false)
-                if (Target==2){
-                    CUHK_JC_iCar.setHeadColor(0x00ff00)
-                    basic.pause(1000)
-                     if (tag.length != 0){Target=tag.shift()} else {Target = 0}
-                }                
-                CUHK_JC_iCar.headLightsOff()
-                Line_Follow_Until_Tag(3, LSpeed, RSpeed, FSpeed, false)
-                if (Target==3){
-                    CUHK_JC_iCar.setHeadColor(0x00ff00)
-                    basic.pause(1000)
-                     if (tag.length != 0){Target=tag.shift()} else {Target = 0}
-                }
-                CUHK_JC_iCar.headLightsOff()
-                Pointing = 7
-                Current_Location = 3
-                while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
-                }
-                Turn_90_Deg(RSpeed)
-                Turn_90_Deg(RSpeed)
-                Line_Follow_Until_Tag(3, LSpeed, RSpeed, FSpeed, false)
-                home_calibration(LSpeed, RSpeed, FSpeed)
-                while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
-                }
-                CUHK_JC_iCar.carStop()
-            }
-            else if ((Target==5)||(Target==6)){
-                Search_Tag(5, search_to_Left_Right(5), LSpeed, RSpeed, FSpeed)
-                Line_Follow_Until_Tag(5, LSpeed, RSpeed, FSpeed, false)
-                if (Target==5){
-                    CUHK_JC_iCar.setHeadColor(0x00ff00)
-                    basic.pause(1000)
-                     if (tag.length != 0){Target=tag.shift()} else {Target = 0}
-      
-                }
-                forward_until_tag(5,FSpeed)
-                Turn_90_Deg(RSpeed)
-                CUHK_JC_iCar.headLightsOff()
-                Line_Follow_Until_Tag(6, LSpeed, RSpeed, FSpeed, false)
-                if (Target==6){
-                    CUHK_JC_iCar.setHeadColor(0x00ff00)
-                    basic.pause(1000)
-                     if (tag.length != 0){Target=tag.shift()} else {Target = 0}
-                }                
-                CUHK_JC_iCar.headLightsOff()
-                Pointing = 2
-                Current_Location = 6
-                while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
-                }
-                Turn_90_Deg(RSpeed)
-                Turn_90_Deg(RSpeed)
-                Line_Follow_Until_Tag(6, LSpeed, RSpeed, FSpeed, false)
-                home_calibration(LSpeed, RSpeed, FSpeed)
-                while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
-                }
-                CUHK_JC_iCar.carStop()
-            }
-            else{
-                Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
-                Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
-                Turn_90_Deg(RSpeed)
-                Pointing = Update_Pointing()
-                CUHK_JC_iCar.headLightsOff()
-                Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, false)
-                home_calibration(LSpeed, RSpeed, FSpeed)
-                while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
-                }
-                CUHK_JC_iCar.carStop()
-                 if (tag.length != 0){Target=tag.shift()} else {Target = 0}
-            }
-
-            
-        }
-      }
-      else{
-        if(Complicated_Case(tag)){
-            Search_Tag(start, search_to_Left_Right(start), LSpeed, RSpeed, FSpeed)
-            Line_Follow_Until_Tag(start, LSpeed, RSpeed, FSpeed, true)
-            tag.removeAt(tag.indexOf(start))
-            let counter = 9
-            while (Current_Location != end){
-                counter = Current_Location + 1
-                if (Current_Location+1>8){ counter = 1 }
-                Line_Follow_Until_Tag(counter, LSpeed, RSpeed, FSpeed, false)
-                if (tag.indexOf(counter)!=-1){
-                    CUHK_JC_iCar.setHeadColor(0x00ff00)
-                    basic.pause(1000)
-                    tag.removeAt(tag.indexOf(counter))
-                }                
-                CUHK_JC_iCar.headLightsOff()
-            }
-            while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
-                }
-            Turn_90_Deg(RSpeed)
-            Turn_90_Deg(RSpeed)
-            Line_Follow_Until_Tag(end, LSpeed, RSpeed, FSpeed, false)
-            home_calibration(LSpeed, RSpeed, FSpeed)
-            while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
-            }
-            CUHK_JC_iCar.carStop()
-            Current_Location = end
-            Update_Pointing()
-        }
-        while(tag.length != 0){
-            Target = tag.shift()
-            Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
-            Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
-            if(tag.length!=0){
-                if (tag[1]-Target>2){
-                   Turn_90_Deg(RSpeed)
-                    Line_Follow_Until_Tag(Current_Location, LSpeed, RSpeed, FSpeed, false)
-                    home_calibration(LSpeed, RSpeed, FSpeed)
-                    while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
-                    }
-                    CUHK_JC_iCar.carStop()
-                    Update_Pointing()
-                }
-                else{
-                    switch1(tag[0], LSpeed, RSpeed, FSpeed, false)
-                    while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
-                    }
-                    Turn_90_Deg(RSpeed)
-                    Turn_90_Deg(RSpeed)
-                    Line_Follow_Until_Tag(Current_Location, LSpeed, RSpeed, FSpeed, false)
-                    home_calibration(LSpeed, RSpeed, FSpeed)
-                    while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
-                    }
-                    CUHK_JC_iCar.carStop()
-                    Current_Location = end
-                    Update_Pointing()
-                }
-            } else{
-                    Turn_90_Deg(RSpeed)
-                    Line_Follow_Until_Tag(Current_Location, LSpeed, RSpeed, FSpeed, false)
-                    home_calibration(LSpeed, RSpeed, FSpeed)
-                    while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
-                    }
-                    CUHK_JC_iCar.carStop()
-            }
-
-        }
-
-      
-      }
     }
   }
-    
+
+  /**
+  * Move iCar to array of points(A to H) using Knowledge-based reasoning, click "+" to customize speed values
+  */
+  //% block="iCar deliver food to $location using knowledge-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
+  //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
+  //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=20
+  //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=20
+  //% inlineInputMode=inline
+  //% expandableArgumentMode="toggle"
+  //% group="iCar Food Delivery" blockGap=10
+  export function skill(location: string[], LSpeed?: number,RSpeed?: number,FSpeed?: number): void {
+    huskylens.initI2c()
+    huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
+    tag = sort(location)
+    if(Complicated_Case(tag)){
+        Search_Tag(start, search_to_Left_Right(start), LSpeed, RSpeed, FSpeed)
+        Line_Follow_Until_Tag(start, LSpeed, RSpeed, FSpeed, true)
+        tag.removeAt(tag.indexOf(start))
+        let counter = 9
+        while (Current_Location != end){
+            counter = Current_Location + 1
+            if (Current_location+1>8){ counter = 1 }
+            Line_Follow_Until_Tag(counter, LSpeed, RSpeed, FSpeed, false)
+            if (tag.indexOf(counter)!=-1){
+                CUHK_JC_iCar.setHeadColor(0x00ff00)
+                basic.pause(1000)
+                tag.removeAt(tag.indexOf(counter))
+            }                
+            CUHK_JC_iCar.headLightsOff()
+        }
+        while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
+            }
+        Turn_90_Deg(RSpeed)
+        Turn_90_Deg(RSpeed)
+        Line_Follow_Until_Tag(end, LSpeed, RSpeed, FSpeed, false)
+        home_calibration(LSpeed, RSpeed, FSpeed)
+        while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+        }
+        CUHK_JC_iCar.carStop()
+        Current_Location = end
+        Update_Pointing()
+    }
+    while(tag.length != 0){
+        Target = tag.shift()
+        Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
+        Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
+        if(tag.length!=0){
+            if (tag[1]-Target>2){
+                Turn_90_Deg(RSpeed)
+                Line_Follow_Until_Tag(Current_Location, LSpeed, RSpeed, FSpeed, false)
+                home_calibration(LSpeed, RSpeed, FSpeed)
+                while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
+                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+                }
+                CUHK_JC_iCar.carStop()
+                Update_Pointing()
+            }
+            else{
+                switch(tag[0], LSpeed, RSpeed, FSpeed, false)
+                while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
+                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
+                }
+                Turn_90_Deg(RSpeed)
+                Turn_90_Deg(RSpeed)
+                Line_Follow_Until_Tag(Current_Location, LSpeed, RSpeed, FSpeed, false)
+                home_calibration(LSpeed, RSpeed, FSpeed)
+                while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
+                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+                }
+                CUHK_JC_iCar.carStop()
+                Update_Pointing()
+            }
+        } else{
+                Turn_90_Deg(RSpeed)
+                Line_Follow_Until_Tag(Current_Location, LSpeed, RSpeed, FSpeed, false)
+                home_calibration(LSpeed, RSpeed, FSpeed)
+                while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
+                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+                }
+                CUHK_JC_iCar.carStop()
+        }
+    }
+    }
 
 }
