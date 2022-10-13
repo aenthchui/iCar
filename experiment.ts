@@ -45,15 +45,15 @@ namespace CUHK_JC_iCar_Experiments {
             huskylens.request()
             while (huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
                 if (huskylens.readeBox(tag, Content1.xCenter) < 140) {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed * 0.7)
+                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed * 0.85)
                 } else if (huskylens.readeBox(tag, Content1.xCenter) > 180) {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed * 0.7)
+                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed * 0.85)
                 } else {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed * 0.7)
+                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed * 0.85)
                 }
                 huskylens.request()
             }
-            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed * 0.7)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed * 0.85)
             basic.pause(500)
             huskylens.request()
             if (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
@@ -178,9 +178,9 @@ namespace CUHK_JC_iCar_Experiments {
     * Move iCar to array of points(A to H) using Knowledge-bases reasoning, click "+" to customize speed values
     */
     //% block="iCar deliver food to $location using KNOWLEDGE-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
-    //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
-    //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=20
-    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=20
+    //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=30
+    //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=30
+    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=30
     //% inlineInputMode=inline
     //% expandableArgumentMode="toggle"
     //% group="iCar Food Delivery" blockGap=10
@@ -225,9 +225,9 @@ namespace CUHK_JC_iCar_Experiments {
     * Move iCar to array of points(A to H) using Rule-bases reasoning, click "+" to customize speed values
     */
     //% block="iCar deliver food to $location using RULE-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
-    //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
-    //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=20
-    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=20
+    //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=30
+    //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=30
+    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=30
     //% inlineInputMode=inline
     //% expandableArgumentMode="toggle"
     //% group="iCar Food Delivery" blockGap=10
@@ -332,9 +332,9 @@ namespace CUHK_JC_iCar_Experiments {
     * Move iCar to array of points(A to H) using SKill-bases reasoning, click "+" to customize speed values
     */
     //% block="iCar deliver food to $location using SKILL-based reasoning || at left turn speed %LSpeed\\%, right turn speed %RSpeed\\%, forward speed %FSpeed\\%"
-    //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
-    //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=20
-    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=20
+    //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=30
+    //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=30
+    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=30
     //% inlineInputMode=inline
     //% expandableArgumentMode="toggle"
     //% group="iCar Food Delivery" blockGap=10
