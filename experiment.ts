@@ -156,22 +156,16 @@ namespace CUHK_JC_iCar_Experiments {
         }
         CUHK_JC_iCar.headLightsOff()
     }
-    export function switch1(t: number, LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean): number {
-        Line_Follow_Until_Tag(t, LSpeed, RSpeed, FSpeed, false)
-        if (tag.length != 0) {
-            if (tag[0] - Current_Location < 2) {
-                switch1(tag[0], LSpeed, RSpeed, FSpeed, false)
-            } else {
-                return 0
-            }
-        } else {
-            return 0
+    function blink() {
+        for (let index = 0; index < 3; index++) {
+            CUHK_JC_iCar.setHeadColor(0xff0000)
+            basic.pause(200)
+            CUHK_JC_iCar.setHeadColor(0x0000ff)
+            basic.pause(200)
+            CUHK_JC_iCar.setHeadColor(0x00ff00)
+            basic.pause(200)
         }
-        return 0
     }
-    function 
-
-
     /**
     * Sample points of delivering to A, B, F, G
     */
@@ -195,12 +189,12 @@ namespace CUHK_JC_iCar_Experiments {
         huskylens.initMode(protocolAlgorithm.ALGORITHM_TAG_RECOGNITION)
         tag = sort(location)
         Complicated_Case()
-        while (tag.length != 0) { 
+        while (tag.length != 0) {
             Target = tag.shift()
             Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
             Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
             CUHK_JC_iCar.headLightsOff()
-            while (tag.length != 0) { 
+            while (tag.length != 0) {
                 if (tag[0] - Target <= 2) {
                     Target = tag.shift()
                     Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, false)
@@ -223,14 +217,7 @@ namespace CUHK_JC_iCar_Experiments {
             CUHK_JC_iCar.carStop()
 
         }
-        for (let index = 0; index < 3; index++) {
-            CUHK_JC_iCar.setHeadColor(0xff0000)
-            basic.pause(200)
-            CUHK_JC_iCar.setHeadColor(0x0000ff)
-            basic.pause(200)
-            CUHK_JC_iCar.setHeadColor(0x00ff00)
-            basic.pause(200)
-        }
+        blink()
     }
 
 
@@ -339,14 +326,7 @@ namespace CUHK_JC_iCar_Experiments {
 
 
         }
-        for (let index = 0; index < 3; index++) {
-            CUHK_JC_iCar.setHeadColor(0xff0000)
-            basic.pause(200)
-            CUHK_JC_iCar.setHeadColor(0x0000ff)
-            basic.pause(200)
-            CUHK_JC_iCar.setHeadColor(0x00ff00)
-            basic.pause(200)
-        }
+        blink()
     }
     /**
     * Move iCar to array of points(A to H) using SKill-bases reasoning, click "+" to customize speed values
@@ -376,13 +356,6 @@ namespace CUHK_JC_iCar_Experiments {
             }
             CUHK_JC_iCar.carStop()
         }
-        for (let index = 0; index < 3; index++) {
-            CUHK_JC_iCar.setHeadColor(0xff0000)
-            basic.pause(200)
-            CUHK_JC_iCar.setHeadColor(0x0000ff)
-            basic.pause(200)
-            CUHK_JC_iCar.setHeadColor(0x00ff00)
-            basic.pause(200)
-        }
+        blink()
     }
 }
