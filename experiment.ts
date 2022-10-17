@@ -299,20 +299,21 @@ namespace CUHK_JC_iCar_Experiments {
                         }
                         CUHK_JC_iCar.carStop()
                     }
-                    continue
                 }
-                Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
-                Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
-                Turn_90_Deg(RSpeed)
-                Pointing = Update_Pointing()
-                CUHK_JC_iCar.headLightsOff()
-                Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, false)
-                home_calibration(LSpeed, RSpeed, FSpeed)
-                while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+                if (Target != 0) { 
+                    Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
+                    Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
+                    Turn_90_Deg(RSpeed)
+                    Pointing = Update_Pointing()
+                    CUHK_JC_iCar.headLightsOff()
+                    Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, false)
+                    home_calibration(LSpeed, RSpeed, FSpeed)
+                    while (!(CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine))) {
+                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+                    }
+                    CUHK_JC_iCar.carStop()
+                    if (tag.length != 0) { Target = tag.shift() } else { Target = 0 }
                 }
-                CUHK_JC_iCar.carStop()
-                if (tag.length != 0) { Target = tag.shift() } else { Target = 0 }
             }
         }
         blink()
