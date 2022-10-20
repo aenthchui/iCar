@@ -1,4 +1,4 @@
-//% color="#7D2882" weight=4 icon="\uf0c3" block="CUHK_JC_iCar_Experiments"
+//% color="#7D2882" weight=4 icon="\uf0c3" block="CUHK-JC iCar Experiments"
 //% groups='["iCar Food Delivery","iCar Moral Dilemma"]'
 
 namespace CUHK_JC_iCar_Experiments {
@@ -180,6 +180,50 @@ namespace CUHK_JC_iCar_Experiments {
         }
     }
     /**
+    * Save elderlies or kids in moral dilemma experiment
+    */
+    //% block="iCar save %index in moral dilemma experiment"
+    //% expandableArgumentMode="toggle"
+    //% group="iCar Moral Dilemma" blockGap=10
+    export function moralDilemma(index?: person): void {
+        huskylens.initI2c()
+        huskylens.initMode(protocolAlgorithm.OBJECTCLASSIFICATION)
+        basic.showIcon(IconNames.Happy)
+        while (true) {
+            if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 40)
+            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinRight, 40)
+            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, 40)
+            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
+                CUHK_JC_iCar.carStop()
+                break;
+            }
+        }
+        while (true) {
+            huskylens.request()
+            if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock) || huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+                break;
+            }
+        }
+        if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+            basic.showNumber(2)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
+            basic.pause(200)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
+            basic.pause(1000)
+            CUHK_JC_iCar.carStop()
+        } else if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+            basic.showNumber(3)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
+            basic.pause(200)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
+            basic.pause(1000)
+            CUHK_JC_iCar.carStop()
+        }
+    }
+    /**
     * Sample points of delivering to A, B, F, G
     */
     //% block="Points A,B,F,G"
@@ -323,49 +367,5 @@ namespace CUHK_JC_iCar_Experiments {
             }
         }
         blink()
-    }
-    /**
-    * Perform moral dilemma experiment and evade elderlies or kids
-    */
-    //% block="iCar perform moral dilemma experiment and evade %index "
-    //% expandableArgumentMode="toggle"
-    //% group="iCar Moral Dilemma" blockGap=10
-    export function moralDilemma(index?: person): void {
-        huskylens.initI2c()
-        huskylens.initMode(protocolAlgorithm.OBJECTCLASSIFICATION)
-        basic.showIcon(IconNames.Happy)
-        while (true) {
-            if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
-                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 40)
-            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
-                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinRight, 40)
-            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
-                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, 40)
-            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
-                CUHK_JC_iCar.carStop()
-                break;
-            }
-        }
-        while (true) {
-            huskylens.request()
-            if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock) || huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
-                break;
-            }
-        }
-        if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
-            basic.showNumber(2)
-            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
-            basic.pause(200)
-            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
-            basic.pause(1000)
-            CUHK_JC_iCar.carStop()
-        } else if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
-            basic.showNumber(3)
-            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
-            basic.pause(200)
-            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
-            basic.pause(1000)
-            CUHK_JC_iCar.carStop()
-        }
     }
 }
