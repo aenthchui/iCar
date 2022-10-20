@@ -1,5 +1,5 @@
-//% color="#EC7482" weight=4 icon="\uf0c3" block="CUHK_JC_iCar_Experiments"
-//% groups='["iCar Food Delivery"]'
+//% color="#7D2882" weight=4 icon="\uf0c3" block="CUHK_JC_iCar_Experiments"
+//% groups='["iCar Food Delivery","iCar Moral Dilemma"]'
 
 namespace CUHK_JC_iCar_Experiments {
     let Current_Location = 0
@@ -14,6 +14,12 @@ namespace CUHK_JC_iCar_Experiments {
         rule = 2,
         //% block="Knowledge-based"
         knowledge = 3
+    }
+    export enum person {
+        //% block="elderlies"
+        skill = 1,
+        //% block="kids"
+        rule = 2,
     }
 
     export function sort(location: string[]): number[] {
@@ -182,8 +188,8 @@ namespace CUHK_JC_iCar_Experiments {
         return ["a", "b", "f", "g"]
     }
     /**
-* Move iCar to array of points(A to H) using SKill, Rule or Knowledge-bases reasoning, click "+" to customize speed values
-*/
+    * Move iCar to array of points(A to H) using SKill, Rule or Knowledge-bases reasoning, click "+" to customize speed values
+    */
     //% block="iCar deliver food to $location using %index reasoning || at left speed %LSpeed\\%, right speed %RSpeed\\%, forward speed %FSpeed\\%"
     //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=30
     //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=30
@@ -317,5 +323,49 @@ namespace CUHK_JC_iCar_Experiments {
             }
         }
         blink()
+    }
+    /**
+    * Perform moral dilemma experiment and evade elderlies or kids
+    */
+    //% block="iCar perform moral dilemma experiment and evade %index "
+    //% expandableArgumentMode="toggle"
+    //% group="iCar Moral Dilemma" blockGap=10
+    export function moralDilemma(index?: person): void {
+        huskylens.initI2c()
+        huskylens.initMode(protocolAlgorithm.OBJECTCLASSIFICATION)
+        basic.showIcon(IconNames.Happy)
+        while (true) {
+            if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 40)
+            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinRight, 40)
+            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, 40)
+            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
+                CUHK_JC_iCar.carStop()
+                break;
+            }
+        }
+        while (true) {
+            huskylens.request()
+            if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock) || huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+                break;
+            }
+        }
+        if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+            basic.showNumber(2)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
+            basic.pause(200)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
+            basic.pause(1000)
+            CUHK_JC_iCar.carStop()
+        } else if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+            basic.showNumber(3)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
+            basic.pause(200)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
+            basic.pause(1000)
+            CUHK_JC_iCar.carStop()
+        }
     }
 }
