@@ -247,7 +247,7 @@ namespace CUHK_JC_iCar_Experiments {
         tag = sort(location)
         if (index == 3) {
             while (tag.length != 0) {
-                tag = Complicated_Case()
+                Complicated_Case()
                 Target = tag.shift()
                 Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
                 Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
