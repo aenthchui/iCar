@@ -247,6 +247,7 @@ namespace CUHK_JC_iCar_Experiments {
         tag = sort(location)
         if (index == 3) {
             while (tag.length != 0) {
+                tag = Complicated_Case()
                 Target = tag.shift()
                 Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
                 Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
@@ -316,7 +317,7 @@ namespace CUHK_JC_iCar_Experiments {
                         }
                         CUHK_JC_iCar.carStop()
                     }
-                    else if ((Target == 5) || (Target == 6)) {
+                    if ((Target == 5) || (Target == 6)) {
                         Search_Tag(5, search_to_Left_Right(5), LSpeed, RSpeed, FSpeed)
                         Line_Follow_Until_Tag(5, LSpeed, RSpeed, FSpeed, false)
                         if (Target == 5) {
