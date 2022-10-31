@@ -9,12 +9,16 @@ namespace CUHK_JC_iCar_Experiments {
     let tag: number[] = []
     export enum reason {
         //% block="Skill-based"
-        //% block.loc.zh-tw="前行"
-        //% block.loc.zh-cn="前走"
+        //% block.loc.zh-tw="本能"
+        //% block.loc.zh-cn="本能"
         skill = 1,
         //% block="Rule-based"
+        //% block.loc.zh-tw="規則"
+        //% block.loc.zh-cn="规则"
         rule = 2,
         //% block="Knowledge-based"
+        //% block.loc.zh-tw="知識"
+        //% block.loc.zh-cn="知识"
         knowledge = 3
     }
     export enum person {
