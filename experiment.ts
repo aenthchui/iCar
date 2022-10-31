@@ -9,6 +9,8 @@ namespace CUHK_JC_iCar_Experiments {
     let tag: number[] = []
     export enum reason {
         //% block="Skill-based"
+        //% block.loc.zh-tw="前行"
+        //% block.loc.zh-cn="前走"
         skill = 1,
         //% block="Rule-based"
         rule = 2,
@@ -17,8 +19,12 @@ namespace CUHK_JC_iCar_Experiments {
     }
     export enum person {
         //% block="elderlies"
+        //% block.loc.zh-tw="長者"
+        //% block.loc.zh-cn="長者"
         skill = 1,
         //% block="kids"
+        //% block.loc.zh-tw="小孩"
+        //% block.loc.zh-cn="小孩"
         rule = 2,
     }
 
@@ -183,6 +189,8 @@ namespace CUHK_JC_iCar_Experiments {
     * Save elderlies or kids in moral dilemma experiment
     */
     //% block="iCar save %index in moral dilemma experiment"
+    //% block.loc.zh-tw="iCar進行道德困境實驗，保護 %index "
+    //% block.loc.zh-cn="iCar进行道德困境实验，保护 %index "
     //% expandableArgumentMode="toggle"
     //% group="iCar Moral Dilemma" blockGap=10
     export function moralDilemma(index?: person): void {
@@ -235,6 +243,8 @@ namespace CUHK_JC_iCar_Experiments {
     * Move iCar to array of points(A to H) using SKill, Rule or Knowledge-bases reasoning, click "+" to customize speed values
     */
     //% block="iCar deliver food to $location using %index reasoning || at left speed %LSpeed\\%, right speed %RSpeed\\%, forward speed %FSpeed\\%"
+    //% block.loc.zh-tw="iCar基於 %index 的推理，送遞外賣至 $location 點||，左速度為%LSpeed\\%，右速度為%RSpeed\\%，前行速度為%FSpeed\\%"
+    //% block.loc.zh-cn="iCar基于 %index 的推理，送递外卖至 $location 点||，左速度为%LSpeed\\%，右速度为%RSpeed\\%，前行速度为%FSpeed\\%"
     //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=30
     //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=30
     //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=30
