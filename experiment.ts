@@ -243,7 +243,7 @@ namespace CUHK_JC_iCar_Experiments {
             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
             basic.pause(1000)
             CUHK_JC_iCar.carStop()
-            break
+            break;
             }
         }
 
