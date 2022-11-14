@@ -25,11 +25,11 @@ namespace CUHK_JC_iCar_Experiments {
         //% block="elderlies"
         //% block.loc.zh-tw="長者"
         //% block.loc.zh-cn="長者"
-        elderlie = 1,
+        elderlies = 1,
         //% block="kids"
         //% block.loc.zh-tw="小孩"
         //% block.loc.zh-cn="小孩"
-        kid = 2,
+        kids = 2,
     }
 
     export function sort(location: string[]): number[] {
@@ -231,11 +231,11 @@ namespace CUHK_JC_iCar_Experiments {
                     }
                 } else if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
                     basic.showNumber(3)
-                    if (index == 1){
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
+                    if (index == 2){
+                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
                     }
                     else{
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
+                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
                     }
 
                 }
