@@ -215,34 +215,34 @@ namespace CUHK_JC_iCar_Experiments {
                         break;
                     }
                 }
-                while (true) {
+                //while (true) {
                     huskylens.request()
-                    if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock) || huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
-                        break;
-                    }
-                }
+                    //if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock) || huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+                        //break;
+                    //}
+                //}
                 if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
                     basic.showNumber(2)
-                    if (index == 1){
+                    if (index == 1) {
                         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
                     }
-                    else{
+                    else {
                         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
                     }
                 } else if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
                     basic.showNumber(3)
-                    if (index == 2){
+                    if (index == 2) {
                         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
                     }
-                    else{
+                    else {
                         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
                     }
-
                 }
-            basic.pause(200)
-            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
-            basic.pause(1000)
-            CUHK_JC_iCar.carStop()
+                basic.pause(200)
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
+                basic.pause(1000)
+                CUHK_JC_iCar.carStop()
+                break;
             }
         }
 
