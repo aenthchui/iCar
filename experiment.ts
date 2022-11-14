@@ -192,61 +192,69 @@ namespace CUHK_JC_iCar_Experiments {
     /**
     * Save elderlies or kids in moral dilemma experiment
     */
-    //% block="iCar save %index in moral dilemma experiment when button A is pressed"
-    //% block.loc.zh-tw="iCar當按鈕A被按下時進行道德困境實驗，保護 %index "
-    //% block.loc.zh-cn="iCar當按鈕A被按下時进行道德困境实验，保护 %index "
+    //% block="iCar save %index in moral dilemma experiment"
+    //% block.loc.zh-tw="iCar進行道德困境實驗，保護 %index "
+    //% block.loc.zh-cn="iCar进行道德困境实验，保护 %index "
     //% expandableArgumentMode="toggle"
     //% group="iCar Moral Dilemma" blockGap=10
     export function moralDilemma(index?: person): void {
-        huskylens.initI2c()
-        huskylens.initMode(protocolAlgorithm.OBJECTCLASSIFICATION)
-        basic.showIcon(IconNames.Happy)
         while (true) {
-            if (input.buttonIsPressed(Button.A)) {
-                while (true) {
-                    if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 40)
-                    } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinRight, 40)
-                    } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, 40)
-                    } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
-                        CUHK_JC_iCar.carStop()
-                        break;
-                    }
-                }
-                //while (true) {
-                    huskylens.request()
-                    //if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock) || huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
-                        //break;
-                    //}
-                //}
-                if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
-                    basic.showNumber(2)
-                    if (index == 1) {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
-                    }
-                    else {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
-                    }
-                } else if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
-                    basic.showNumber(3)
-                    if (index == 2) {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
-                    }
-                    else {
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
-                    }
-                }
-                basic.pause(200)
-                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
-                basic.pause(1000)
+            if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 40)
+            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinRight, 40)
+            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, 40)
+            } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
                 CUHK_JC_iCar.carStop()
                 break;
             }
         }
-
+        while (true) {
+            huskylens.request()
+            if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock) || huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+                break;
+            }
+        }
+        if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+            basic.showNumber(2)
+            if (index == 1) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
+            }
+            else {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
+            }
+            basic.pause(200)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
+            basic.pause(1000)
+            CUHK_JC_iCar.carStop()
+        } else if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
+            basic.showNumber(3)
+            if (index == 2) {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
+            }
+            else {
+                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
+            }
+            basic.pause(200)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
+            basic.pause(1000)
+            CUHK_JC_iCar.carStop()
+        }
     }
+    /**
+    * Initialize camera for moral dilemma experiment
+    */
+    //% block="iCar init moral dilemma"
+    //% block.loc.zh-tw="iCar初始化道德困境實驗"
+    //% block.loc.zh-cn="iCar初始化道德困境实验"
+    //% group="iCar Moral Dilemma" blockGap=10
+    export function initMoralDilemma(): void {
+        huskylens.initI2c()
+        huskylens.initMode(protocolAlgorithm.OBJECTCLASSIFICATION)
+        basic.showIcon(IconNames.Happy)
+    }
+
     /**
     * Sample points of delivering to A, B, F, G
     */
