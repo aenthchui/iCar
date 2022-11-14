@@ -25,11 +25,11 @@ namespace CUHK_JC_iCar_Experiments {
         //% block="elderlies"
         //% block.loc.zh-tw="長者"
         //% block.loc.zh-cn="長者"
-        skill = 1,
+        elderlie = 1,
         //% block="kids"
         //% block.loc.zh-tw="小孩"
         //% block.loc.zh-cn="小孩"
-        rule = 2,
+        kid = 2,
     }
 
     export function sort(location: string[]): number[] {
@@ -223,19 +223,26 @@ namespace CUHK_JC_iCar_Experiments {
                 }
                 if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
                     basic.showNumber(2)
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
-                    basic.pause(200)
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
-                    basic.pause(1000)
-                    CUHK_JC_iCar.carStop()
+                    if (person == 1){
+                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
+                    }
+                    else{
+                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
+                    }
                 } else if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
                     basic.showNumber(3)
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
-                    basic.pause(200)
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
-                    basic.pause(1000)
-                    CUHK_JC_iCar.carStop()
+                    if (person == 1){
+                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
+                    }
+                    else{
+                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
+                    }
+
                 }
+            basic.pause(200)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, 60)
+            basic.pause(1000)
+            CUHK_JC_iCar.carStop()
             break
             }
         }
