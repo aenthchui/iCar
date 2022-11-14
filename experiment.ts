@@ -223,7 +223,7 @@ namespace CUHK_JC_iCar_Experiments {
                 }
                 if (huskylens.isAppear(2, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
                     basic.showNumber(2)
-                    if (person == 1){
+                    if (index == 1){
                         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, 70)
                     }
                     else{
@@ -231,7 +231,7 @@ namespace CUHK_JC_iCar_Experiments {
                     }
                 } else if (huskylens.isAppear(3, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
                     basic.showNumber(3)
-                    if (person == 1){
+                    if (index == 1){
                         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, 70)
                     }
                     else{
