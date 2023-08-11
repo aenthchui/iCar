@@ -13,7 +13,6 @@
         "shims.d.ts",
         "enums.d.ts",
         "sendBuffer.asm",
-        "extension.ts",
         "experiment.ts"
     ],
     "testFiles": [
