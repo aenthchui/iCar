@@ -136,15 +136,15 @@ namespace CUHK_JC_iCar_Experiments {
         }
     }
     function Line_Following(LSpeed: number, RSpeed: number, FSpeed: number) {
-        if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine)) {
-            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Left, CUHK_JC_iCar.direction.Forward, LSpeed)
+        basic.showNumber(0)
+        if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+        } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed)
+        } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed)
         } else {
-            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Left, CUHK_JC_iCar.direction.Forward, 0)
-        }
-        if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
-            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Right, CUHK_JC_iCar.direction.Forward, RSpeed)
-        } else {
-            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Right, CUHK_JC_iCar.direction.Forward, 0)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
         }
     }
     function Update_Pointing(): number {
@@ -255,11 +255,12 @@ namespace CUHK_JC_iCar_Experiments {
         huskylens.initMode(protocolAlgorithm.OBJECTCLASSIFICATION)
         basic.showIcon(IconNames.Happy)
     }
-
     /**
     * Sample points of delivering to A, B, F, G
     */
     //% block="Points A,B,F,G"
+    //% block.loc.zh-tw="A,B,F,G"
+    //% block.loc.zh-cn="A,B,F,G"
     //% group="iCar Food Delivery" blockGap=10
     export function ABFG(): string[] {
         return ["a", "b", "f", "g"]
@@ -270,9 +271,9 @@ namespace CUHK_JC_iCar_Experiments {
     //% block="iCar deliver food to $location using %index reasoning || at left speed %LSpeed\\%, right speed %RSpeed\\%, forward speed %FSpeed\\%"
     //% block.loc.zh-tw="iCar基於 %index 的推理，送遞外賣至 $location 點||，左速度為%LSpeed\\%，右速度為%RSpeed\\%，前行速度為%FSpeed\\%"
     //% block.loc.zh-cn="iCar基于 %index 的推理，送递外卖至 $location 点||，左速度为%LSpeed\\%，右速度为%RSpeed\\%，前行速度为%FSpeed\\%"
-    //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=30
-    //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=30
-    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=30
+    //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=25
+    //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=25
+    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=25
     //% inlineInputMode=inline
     //% expandableArgumentMode="toggle"
     //% group="iCar Food Delivery" blockGap=10
@@ -386,7 +387,7 @@ namespace CUHK_JC_iCar_Experiments {
                         CUHK_JC_iCar.carStop()
                     }
                 }
-                if (Target != 0) {
+                if (Target != 0) { 
                     Search_Tag(Target, search_to_Left_Right(Target), LSpeed, RSpeed, FSpeed)
                     Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
                     Turn_90_Deg(RSpeed)
