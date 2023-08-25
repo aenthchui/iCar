@@ -102,7 +102,7 @@ namespace CUHK_JC_iCar_Experiments {
                 huskylens.request()
             }
             CUHK_JC_iCar.carStop()
-            basic.pause(500)
+            basic.pause(1000)
             huskylens.request()
             if (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
                 break;
