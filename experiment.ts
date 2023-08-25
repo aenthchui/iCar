@@ -101,7 +101,7 @@ namespace CUHK_JC_iCar_Experiments {
                 huskylens.request()
             }
             CUHK_JC_iCar.carStop()
-            basic.pause(200)
+            basic.pause(500)
             huskylens.request()
             if (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
                 break;
@@ -138,20 +138,14 @@ namespace CUHK_JC_iCar_Experiments {
     }
     function Line_Following(LSpeed: number, RSpeed: number, FSpeed: number) {
         if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
-            huskylens.writeOSD("LW RW", 150, 30)
             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
         } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
-            huskylens.writeOSD("LW RB", 150, 30)
-            while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
-                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed)
-            }
+            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Left, CUHK_JC_iCar.direction.Forward, RSpeed)
+            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Right, CUHK_JC_iCar.direction.Backward, RSpeed/2)
         } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
-            huskylens.writeOSD("LB RW", 150, 30)
-            while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
-                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed)
-            }
+            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Right, CUHK_JC_iCar.direction.Forward, LSpeed)
+            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Left, CUHK_JC_iCar.direction.Backward, LSpeed/2)
         } else {
-            huskylens.writeOSD("else", 150, 30)
             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
         }
     }
