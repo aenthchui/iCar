@@ -140,11 +140,9 @@ namespace CUHK_JC_iCar_Experiments {
         if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
         } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
-            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Left, CUHK_JC_iCar.direction.Forward, RSpeed)
-            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Right, CUHK_JC_iCar.direction.Backward, RSpeed/2)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinRight, RSpeed)
         } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
-            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Right, CUHK_JC_iCar.direction.Forward, LSpeed)
-            CUHK_JC_iCar.singleTurn(CUHK_JC_iCar.LRstate.Left, CUHK_JC_iCar.direction.Backward, LSpeed/2)
+            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
         } else {
             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
         }
