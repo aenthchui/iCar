@@ -6,6 +6,7 @@ namespace CUHK_JC_iCar_Experiments {
     let Pointing = 1
     let Target = 0
     let start = 0
+    let forceLeft=0
     let tag: number[] = []
     export enum reason {
         //% block="Skill-based"
@@ -100,7 +101,7 @@ namespace CUHK_JC_iCar_Experiments {
                 huskylens.request()
             }
             CUHK_JC_iCar.carStop()
-            basic.pause(50)
+            basic.pause(200)
             huskylens.request()
             if (!(huskylens.isAppear(tag, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
                 break;
@@ -137,12 +138,16 @@ namespace CUHK_JC_iCar_Experiments {
     }
     function Line_Following(LSpeed: number, RSpeed: number, FSpeed: number) {
         if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+            huskylens.writeOSD("LW RW", 150, 30)
             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
         } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.BlackLine)) {
+            huskylens.writeOSD("LW RB", 150, 30)
             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed)
         } else if (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine) && CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Right, CUHK_JC_iCar.enLineState.WhiteLine)) {
+            huskylens.writeOSD("LB RW", 150, 30)
             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed)
         } else {
+            huskylens.writeOSD("else", 150, 30)
             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
         }
     }
@@ -167,6 +172,13 @@ namespace CUHK_JC_iCar_Experiments {
             }
             tag = temp
             temp = []
+        }
+        for (let value of [4, 6]) {
+            if (tag.indexOf(value) != -1) {
+                if (tag.indexOf(value + 1) == -1 && tag.indexOf(value + 2) == -1 && (tag.indexOf(value - 1) != -1 || tag.indexOf(value - 2) != -1)) {
+                    forceLeft = 1
+                }
+            }
         }
     }
     function turn_to_tag(t: number, LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean) {
@@ -270,9 +282,9 @@ namespace CUHK_JC_iCar_Experiments {
     //% block="iCar deliver food to $location using %index reasoning || at left speed %LSpeed\\%, right speed %RSpeed\\%, forward speed %FSpeed\\%"
     //% block.loc.zh-tw="iCar基於 %index 的推理，送遞外賣至 $location 點||，左速度為%LSpeed\\%，右速度為%RSpeed\\%，前行速度為%FSpeed\\%"
     //% block.loc.zh-cn="iCar基于 %index 的推理，送递外卖至 $location 点||，左速度为%LSpeed\\%，右速度为%RSpeed\\%，前行速度为%FSpeed\\%"
-    //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=25
-    //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=25
-    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=25
+    //% LSpeed.min=1 LSpeed.max=100 LSpeed.defl=20
+    //% RSpeed.min=1 RSpeed.max=100 RSpeed.defl=20
+    //% FSpeed.min=1 FSpeed.max=100 FSpeed.defl=20
     //% inlineInputMode=inline
     //% expandableArgumentMode="toggle"
     //% group="iCar Food Delivery" blockGap=10
@@ -299,6 +311,15 @@ namespace CUHK_JC_iCar_Experiments {
                 }
                 while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
                     CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
+                }
+                if(forceLeft == 1 && (Current_Location == 4 || Current_Location == 6)){
+                    huskylens.request()
+                    while (!(huskylens.isAppear(Current_Location, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
+                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed)
+                        huskylens.request()
+                    }
+                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+                    basic.pause(800)
                 }
                 Turn_90_Deg(RSpeed)
                 Turn_90_Deg(RSpeed)
@@ -373,9 +394,14 @@ namespace CUHK_JC_iCar_Experiments {
                         CUHK_JC_iCar.headLightsOff()
                         Pointing = 2
                         Current_Location = 6
-                        while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
-                            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
+                        huskylens.request()
+                        while (!(huskylens.isAppear(6, HUSKYLENSResultType_t.HUSKYLENSResultBlock))) {
+                            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed)
+                            huskylens.request()
                         }
+                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+                        basic.pause(800)
+                        CUHK_JC_iCar.carStop()
                         Turn_90_Deg(RSpeed)
                         Turn_90_Deg(RSpeed)
                         Line_Follow_Until_Tag(6, LSpeed, RSpeed, FSpeed, false)
