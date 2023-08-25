@@ -323,20 +323,20 @@ namespace CUHK_JC_iCar_Experiments {
                 Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, true)
                 CUHK_JC_iCar.headLightsOff()
                 while (tag.length != 0) {
-                    if(Current_Location == 3 && Target == 5){
-                        Line_Follow_Until_Tag(4, LSpeed, RSpeed, FSpeed, false)
-                        while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine)) {
-                            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed)
-                        }
-                    }
-                    if(Current_Location == 5 && Target == 7){
-                        Line_Follow_Until_Tag(6, LSpeed, RSpeed, FSpeed, false)
-                        while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine)) {
-                            CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed)
-                        }
-                    }
                     if (tag[0] - Target <= 2) {
                         Target = tag.shift()
+                        if(Current_Location == 3 && Target == 5){
+                            Line_Follow_Until_Tag(4, LSpeed, RSpeed, FSpeed, false)
+                            while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine)) {
+                                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed)
+                            }
+                        }
+                        if(Current_Location == 5 && Target == 7){
+                            Line_Follow_Until_Tag(6, LSpeed, RSpeed, FSpeed, false)
+                            while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.WhiteLine)) {
+                                CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnRight, RSpeed)
+                            }
+                        }
                         Line_Follow_Until_Tag(Target, LSpeed, RSpeed, FSpeed, false)
                         CUHK_JC_iCar.setHeadColor(0x00ff00)
                         basic.pause(1000)
