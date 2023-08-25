@@ -7,6 +7,7 @@ namespace CUHK_JC_iCar_Experiments {
     let Target = 0
     let start = 0
     let forceLeft=0
+    let forceStraight=0
     let tag: number[] = []
     export enum reason {
         //% block="Skill-based"
@@ -176,6 +177,11 @@ namespace CUHK_JC_iCar_Experiments {
                 }
             }
         }
+        if (tag.indexOf(3) != -1) {
+            if (tag.indexOf(3 + 1) == -1 && tag.indexOf(3 + 2) == -1 && (tag.indexOf(3 - 1) != -1 || tag.indexOf(3 - 2) != -1)) {
+                forceStraight = 1
+            }
+        }
     }
     function turn_to_tag(t: number, LSpeed: number, RSpeed: number, FSpeed: number, straight: boolean) {
         CUHK_JC_iCar.headLightsOff()
@@ -196,6 +202,10 @@ namespace CUHK_JC_iCar_Experiments {
             CUHK_JC_iCar.setHeadColor(0x00ff00)
             basic.pause(200)
         }
+    }
+    function dummy_length(FSpeed: number){
+        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
+        basic.pause(-30*FSpeed+1400)
     }
     /**
     * Save elderlies or kids in moral dilemma experiment
@@ -314,8 +324,10 @@ namespace CUHK_JC_iCar_Experiments {
                         CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed)
                         huskylens.request()
                     }
-                    CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
-                    basic.pause(800)
+                    dummy_length(FSpeed)
+                }
+                if(forceStraight == 1 && Current_Location == 3){
+                    dummy_length(FSpeed)
                 }
                 Turn_90_Deg(RSpeed)
                 Turn_90_Deg(RSpeed)
@@ -357,6 +369,7 @@ namespace CUHK_JC_iCar_Experiments {
                         CUHK_JC_iCar.headLightsOff()
                         Pointing = 7
                         Current_Location = 3
+                        dummy_length(FSpeed)
                         while (CUHK_JC_iCar.Line_Sensor(CUHK_JC_iCar.enPos.Left, CUHK_JC_iCar.enLineState.BlackLine)) {
                             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.SpinLeft, LSpeed)
                         }
@@ -395,8 +408,7 @@ namespace CUHK_JC_iCar_Experiments {
                             CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.TurnLeft, LSpeed)
                             huskylens.request()
                         }
-                        CUHK_JC_iCar.carCtrlSpeed(CUHK_JC_iCar.CarState.Forward, FSpeed)
-                        basic.pause(800)
+                        dummy_length(FSpeed)
                         CUHK_JC_iCar.carStop()
                         Turn_90_Deg(RSpeed)
                         Turn_90_Deg(RSpeed)
